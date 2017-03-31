@@ -1,11 +1,44 @@
 <!DOCTYPE html>
 <html>
+
 <head lang="en">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <title>Tictactoe</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <title>Tictactoe</title>
 </head>
+
 <body>
-  <h1>Hello, World!</h1>
+    <main>
+        <h1 class='topTitle'>Connect 3</h1>
+        <h2 class='scorecard'>0 : 0</h2>
+        <table class='tableX'>
+            <tr>
+                <td id='11' class='none1'></td>
+                <td id='12' class='none2'></td>
+                <td id='13' class='none3'></td>
+            </tr>
+            <tr>
+                <td id='21' class='none4'></td>
+                <td id='22' class='none5'></td>
+                <td id='23' class='none6'></td>
+            </tr>
+            <tr>
+                <td id='31' class='none7'></td>
+                <td id='32' class='none8'></td>
+                <td id='33' class='none9'></td>
+            </tr>
+        </table>
+        <footer>
+            <p class='turn'>It's <span class='turnName'>X</span>'s turn</p>
+            <button class='resetButton'>Reset Game</button>
+        </footer>
+    </main>
+    <div class="overlay">
+        <div class="dialog">
+            <p class='winnerInfo'>What are you going to do?</p>
+            <button class='modalButton'>OK</button>
+        </div>
+    </div>
 </body>
+
 </html>

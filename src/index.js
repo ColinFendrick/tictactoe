@@ -55,8 +55,15 @@ const loadItems = () => {
 }
 
 const modalEnd = (w) => {
-  setTimeout(() => { document.querySelector('body').className = 'modal' }, 1000)
+  setTimeout(() => {
+    document.querySelector('body').className = 'modal'
+  }, 1000)
   document.querySelector('p.winnerInfo').textContent = `The winner is ${w}`
+}
+
+const modalEndDraw = () => {
+  document.querySelector('body').className = 'modal'
+  document.querySelector('p.winnerInfo').textContent = 'It\'s a draw, dummy!'
 }
 
 const resetGame = () => {
@@ -159,13 +166,23 @@ const checkVictory = () => {
     }
     victory(p31, p22, p13)
   }
+  // Checking draw
+  if (document.querySelectorAll('td.X, td.O').length === 9) {
+    modalEndDraw()
+  }
   document.querySelector('h2.scorecard').textContent = `${winsX} : ${winsO}`
 }
 
 const victory = (a, b, c) => {
-  setTimeout(() => { a.className = 'victory' }, 100)
-  setTimeout(() => { b.className = 'victory' }, 350)
-  setTimeout(() => { c.className = 'victory' }, 700)
+  setTimeout(() => {
+    a.className = 'victory'
+  }, 100)
+  setTimeout(() => {
+    b.className = 'victory'
+  }, 350)
+  setTimeout(() => {
+    c.className = 'victory'
+  }, 700)
 }
 
 const main = () => {

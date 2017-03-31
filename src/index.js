@@ -55,7 +55,7 @@ const loadItems = () => {
 }
 
 const modalEnd = (w) => {
-  document.querySelector('body').className = 'modal'
+  setTimeout(() => { document.querySelector('body').className = 'modal' }, 1000)
   document.querySelector('p.winnerInfo').textContent = `The winner is ${w}`
 }
 
@@ -163,9 +163,9 @@ const checkVictory = () => {
 }
 
 const victory = (a, b, c) => {
-  a.className = 'victory'
-  b.className = 'victory'
-  c.className = 'victory'
+  setTimeout(() => { a.className = 'victory' }, 100)
+  setTimeout(() => { b.className = 'victory' }, 350)
+  setTimeout(() => { c.className = 'victory' }, 700)
 }
 
 const main = () => {

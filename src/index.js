@@ -13,22 +13,28 @@ const p33 = document.getElementById('33')
 const squares = document.querySelectorAll('td')
 const modalButton = document.querySelector('button.modalButton')
 const resetButton = document.querySelector('button.resetButton')
-let nextPlayerTurn = window.localStorage.getItem('turn') || 'X'
 let winsX = 0
 let winsO = 0
+let hasAnyoneWon = false
 
 const clickOnBox = (e) => {
-  e.target.className = `${nextPlayerTurn}`
-  nextPlayerTurn === 'X' ? nextPlayerTurn = 'O' : nextPlayerTurn = 'X'
-  document.querySelector('table').className = `table${nextPlayerTurn}`
-  document.querySelector('span.turnName').textContent = `${nextPlayerTurn}`
+  e.target.className = `X`
   checkVictory()
+  if ((document.querySelectorAll('td.X, td.O').length !== 9) && (hasAnyoneWon === false)) {
+    getComputerMove()
+  }
   persistItems()
 }
 
-const doubleClick = (e) => {
-  e.target.className = ''
-  persistItems()
+const getComputerMove = () => {
+  let potentialMoves = []
+  for (var i = 0; i < squares.length; i++) {
+    if (squares[i].className !== 'X' && squares[i].className !== 'O') {
+      potentialMoves.push(squares[i])
+    }
+  }
+  potentialMoves[Math.floor(Math.random() * potentialMoves.length)].className = 'O'
+  checkVictory()
 }
 
 const persistItems = () => {
@@ -37,7 +43,6 @@ const persistItems = () => {
     values.push(squares[i].className)
   }
   window.localStorage.setItem('values', JSON.stringify(values))
-  window.localStorage.setItem('turn', nextPlayerTurn)
   window.localStorage.setItem('winsArray', [winsX, winsO])
 }
 
@@ -46,24 +51,26 @@ const loadItems = () => {
   for (var i = 0; i < values.length; i++) {
     squares[i].className = values[i]
   }
-  document.querySelector('span.turnName').textContent = `${nextPlayerTurn}`
   const winsArray = (window.localStorage.getItem('winsArray'))
   winsX = winsArray[0]
   winsO = winsArray[2]
   document.querySelector('h2.scorecard').textContent = `${winsX} : ${winsO}`
-  document.querySelector('table').className = `table${nextPlayerTurn}`
 }
 
 const modalEnd = (w) => {
   setTimeout(() => {
     document.querySelector('body').className = 'modal'
   }, 1000)
-  document.querySelector('p.winnerInfo').textContent = `The winner is ${w}`
+  if (w === 'X') {
+    document.querySelector('p.winnerInfo').textContent = `Go outside loser`
+  } else if (w === 'O') {
+    document.querySelector('p.winnerInfo').textContent = `You lost dummy`
+  }
 }
 
 const modalEndDraw = () => {
   document.querySelector('body').className = 'modal'
-  document.querySelector('p.winnerInfo').textContent = 'It\'s a draw, dummy!'
+  document.querySelector('p.winnerInfo').textContent = 'Draw me like one of your French girls'
 }
 
 const resetGame = () => {
@@ -71,9 +78,8 @@ const resetGame = () => {
   for (let i = 0; i < squares.length; i++) {
     squares[i].className = `none${i}`
   }
-  nextPlayerTurn = 'X'
-  document.querySelector('span.turnName').textContent = `${nextPlayerTurn}`
   persistItems()
+  hasAnyoneWon = false
 }
 
 const resetLocalStorage = () => {
@@ -81,9 +87,6 @@ const resetLocalStorage = () => {
   for (let i = 0; i < squares.length; i++) {
     squares[i].className = `none${i}`
   }
-  nextPlayerTurn = 'X'
-  window.localStorage.setItem('turn', nextPlayerTurn)
-  document.querySelector('span.turnName').textContent = `${nextPlayerTurn}`
   window.localStorage.setItem('winsArray', [0, 0])
   winsX = 0
   winsO = 0
@@ -91,7 +94,6 @@ const resetLocalStorage = () => {
 }
 
 const checkVictory = () => {
-  // Checking each row
   if (p11.className === p12.className && p12.className === p13.className) {
     modalEnd(p11.className)
     if (p11.className === 'X') {
@@ -100,8 +102,7 @@ const checkVictory = () => {
       winsO++
     }
     victory(p11, p12, p13)
-  }
-  if (p21.className === p22.className && p22.className === p23.className) {
+  } else if (p21.className === p22.className && p22.className === p23.className) {
     modalEnd(p21.className)
     if (p21.className === 'X') {
       winsX++
@@ -109,8 +110,7 @@ const checkVictory = () => {
       winsO++
     }
     victory(p21, p22, p23)
-  }
-  if (p31.className === p32.className && p32.className === p33.className) {
+  } else if (p31.className === p32.className && p32.className === p33.className) {
     modalEnd(p31.className)
     if (p31.className === 'X') {
       winsX++
@@ -118,9 +118,7 @@ const checkVictory = () => {
       winsO++
     }
     victory(p31, p32, p33)
-  }
-  // Checking each column
-  if (p11.className === p21.className && p21.className === p31.className) {
+  } else if (p11.className === p21.className && p21.className === p31.className) {
     modalEnd(p11.className)
     if (p11.className === 'X') {
       winsX++
@@ -128,8 +126,7 @@ const checkVictory = () => {
       winsO++
     }
     victory(p11, p21, p31)
-  }
-  if (p12.className === p22.className && p22.className === p32.className) {
+  } else if (p12.className === p22.className && p22.className === p32.className) {
     modalEnd(p12.className)
     if (p12.className === 'X') {
       winsX++
@@ -137,8 +134,7 @@ const checkVictory = () => {
       winsO++
     }
     victory(p12, p22, p32)
-  }
-  if (p13.className === p23.className && p23.className === p33.className) {
+  } else if (p13.className === p23.className && p23.className === p33.className) {
     modalEnd(p13.className)
     if (p13.className === 'X') {
       winsX++
@@ -146,9 +142,7 @@ const checkVictory = () => {
       winsO++
     }
     victory(p13, p23, p33)
-  }
-  // Checking diagnoals
-  if (p11.className === p22.className && p22.className === p33.className) {
+  } else if (p11.className === p22.className && p22.className === p33.className) {
     modalEnd(p11.className)
     if (p11.className === 'X') {
       winsX++
@@ -156,8 +150,7 @@ const checkVictory = () => {
       winsO++
     }
     victory(p11, p22, p33)
-  }
-  if (p31.className === p22.className && p22.className === p13.className) {
+  } else if (p31.className === p22.className && p22.className === p13.className) {
     modalEnd(p31.className)
     if (p12.className === 'X') {
       winsX++
@@ -165,9 +158,7 @@ const checkVictory = () => {
       winsO++
     }
     victory(p31, p22, p13)
-  }
-  // Checking draw
-  if (document.querySelectorAll('td.X, td.O').length === 9) {
+  } else if (document.querySelectorAll('td.X, td.O').length === 9) {
     modalEndDraw()
   }
   document.querySelector('h2.scorecard').textContent = `${winsX} : ${winsO}`
@@ -183,12 +174,12 @@ const victory = (a, b, c) => {
   setTimeout(() => {
     c.className = 'victory'
   }, 700)
+  hasAnyoneWon = true
 }
 
 const main = () => {
   for (let i = 0; i < squares.length; i++) {
     squares[i].addEventListener('click', clickOnBox)
-    squares[i].addEventListener('dblclick', doubleClick)
   }
   modalButton.addEventListener('click', resetGame)
   resetButton.addEventListener('click', resetLocalStorage)
